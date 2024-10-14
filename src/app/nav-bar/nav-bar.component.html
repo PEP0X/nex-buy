@@ -1,0 +1,139 @@
+<div class="top_nav w-100 text-center">
+  FREE delivery & 40% Discount for next 3 orders! Place your 1st order in.
+</div>
+<nav class="main_nav">
+  <div class="first_nav align-items-center d-flex w-100">
+    <div class="location_time">
+      <fa-icon [icon]="location"></fa-icon> We deliver to you every day from
+      <span>00:00 to 00:00</span>
+    </div>
+    <div class="features">
+      <button type="button">English</button>
+      <button type="button">EGP</button>
+      <button type="button">Order Tracking</button>
+    </div>
+  </div>
+  <div class="saperator"></div>
+  <div class="mid_nav align-items-center justify-content-between">
+    <div class="mobOnly">
+      <div class="logo d-flex align-items-center">
+        <img src="../../assets/logo.svg" width="200" alt="..." />
+      </div>
+      <div class="group-mob">
+        <div class="user_info_mob align-items-center">
+          <div id="account1" class="d-flex align-items-center">
+            <fa-icon class="user" [icon]="user"></fa-icon>
+            <p>Sign In <span>Account</span></p>
+          </div>
+          <a href="#" class="wishlist"><i class="fa-regular fa-heart"></i></a>
+          <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
+        </div>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#toggleMenu"
+          aria-controls="toggleMenu"
+        >
+          <fa-icon class="bars" [icon]="bars"></fa-icon>
+        </button>
+        <div
+          class="offcanvas offcanvas-end"
+          tabindex="-1"
+          id="toggleMenu"
+          aria-labelledby="toggleMenuLabel"
+        >
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="toggleMenuLabel">Menu</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            >
+              <fa-icon [icon]="x"></fa-icon>
+            </button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav menu-color">
+              <li class="nav-item">
+                <a class="nav-link" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">All Categories</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Trending Products</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Sale</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Order Tracking</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Wish List</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Cart</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="search_bar">
+      <input
+        type="text"
+        placeholder="Search for products, categories or brands..."
+      />
+      <fa-icon class="magnifying" [icon]="magnifying"></fa-icon>
+    </div>
+
+    <div class="user_info align-items-center">
+      <div id="account" class="d-flex align-items-center">
+        <fa-icon class="user" [icon]="user"></fa-icon>
+        <p>Sign In <span>Account</span></p>
+      </div>
+      <a href="#" class="wishlist">
+        <fa-icon class="iconsize" [icon]="heart"></fa-icon>
+      </a>
+      <a href="#" class="cart">
+        <fa-icon class="iconsize" [icon]="cart"></fa-icon>
+      </a>
+    </div>
+  </div>
+  <nav class="navbar navbar-expand navbar-light">
+    <ul class="navbar-nav desktop-menu">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Home</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <img class="grid" src="../../assets/grid_home_menu_table_icon.svg" alt=".." />
+          All Categories <fa-icon [icon]="down"></fa-icon>
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="#">Electronics</a></li>
+          <li><a class="dropdown-item" href="#">Jewelery</a></li>
+          <li><a class="dropdown-item" href="#">Men's clothing</a></li>
+          <li><a class="dropdown-item" href="#">Women's clothing</a></li>
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Trending Products</a>
+      </li>
+      <li class="nav-item sale d-flex align-items-center">
+        <a class="nav-link salelink" href="#">Sale</a>
+      </li>
+    </ul>
+  </nav>
+</nav>

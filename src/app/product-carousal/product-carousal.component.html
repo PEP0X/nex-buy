@@ -1,0 +1,20 @@
+<section class="product_slider">
+  <div class="link_products">
+    <div class="heading">
+      <h3>Men's clothing</h3>
+      <p>Do not miss the current offers until the end of March.</p>
+    </div>
+    <a class="view_all" href="#">View All <fa-icon class="bounce" [icon]="right"></fa-icon></a>
+  </div>
+  <div class="product-container">
+    <swiper-container #swiper>
+      <swiper-slide *ngFor="let slide of slides">
+        <div class="card">
+          <p class="heading">{{slide.heading}}</p>
+          <p>{{slide.subheading1}}</p>
+          <p>{{slide.subheading2}}</p>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+</section>

@@ -63,7 +63,7 @@
                 <a class="nav-link" href="#">All Categories</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Trending Products</a>
+                <a class="nav-link" href="">Trending Products</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">Sale</a>
@@ -107,7 +107,7 @@
   <nav class="navbar navbar-expand navbar-light">
     <ul class="navbar-nav desktop-menu">
       <li class="nav-item">
-        <a class="nav-link" href="#">Home</a>
+        <a class="nav-link" routerLink="/">Home</a>
       </li>
       <li class="nav-item dropdown">
         <a
@@ -118,7 +118,11 @@
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <img class="grid" src="../../assets/grid_home_menu_table_icon.svg" alt=".." />
+          <img
+            class="grid"
+            src="../../assets/grid_home_menu_table_icon.svg"
+            alt=".."
+          />
           All Categories <fa-icon [icon]="down"></fa-icon>
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -129,7 +133,7 @@
         </ul>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Trending Products</a>
+        <a class="nav-link" routerLink="/products">Trending Products</a>
       </li>
       <li class="nav-item sale d-flex align-items-center">
         <a class="nav-link salelink" href="#">Sale</a>

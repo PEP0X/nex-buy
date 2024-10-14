@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-regular-svg-icons';
+import { RouterModule } from '@angular/router';
 import {
   faLocationDot,
   faBars,
@@ -12,7 +13,7 @@ import {
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [FontAwesomeModule],
+  imports: [FontAwesomeModule, RouterModule],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css',
 })

@@ -11,11 +11,13 @@ import { MapComponent } from './map/map.component';
 import { FooterComponent } from './footer/footer.component';
 import { MarqueeBrandsComponent } from './marquee-brands/marquee-brands.component';
 import { HomeComponent } from "./home/home.component";
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
+    RouterModule,
     NavBarComponent,
     LandingSectionComponent,
     VideoSectionComponent,

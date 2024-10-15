@@ -10,6 +10,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { register } from 'swiper/element/bundle';
 import { CommonModule } from '@angular/common';
+import { FakeStoreService } from '../fake-store.service';
 
 register();
 
@@ -28,42 +29,11 @@ export class ProductCarousalComponent implements OnInit, AfterViewInit {
   swiperConfig: any;
   slides: any[] = [];
   slidesPerView: number = 3; // Or any default value you prefer
-
-  constructor() {
-    const headings = [
-      'Popular this month',
-      'New arrivals',
-      'Best sellers',
-      'Featured items',
-      'Special offers',
-    ];
-    const subheadings1 = [
-      'Powered By',
-      'Brought to you by',
-      'Curated by',
-      'Designed for',
-      'Exclusive from',
-    ];
-    const subheadings2 = [
-      'Uiverse',
-      'TrendSetters',
-      'StyleHub',
-      'FashionForward',
-      'DesignMasters',
-    ];
-
-    this.slides = Array(10)
-      .fill(null)
-      .map(() => ({
-        heading: headings[Math.floor(Math.random() * headings.length)],
-        subheading1:
-          subheadings1[Math.floor(Math.random() * subheadings1.length)],
-        subheading2:
-          subheadings2[Math.floor(Math.random() * subheadings2.length)],
-      }));
+  products: any[] = [];
+  constructor(private fakeStoreService: FakeStoreService) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.swiperConfig = {
       slidesPerView: 1,
       spaceBetween: 10,
@@ -84,6 +54,12 @@ export class ProductCarousalComponent implements OnInit, AfterViewInit {
         },
       },
     };
+
+    try {
+      this.products = await this.fakeStoreService.getLimitedProducts(10);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
   }
 
   ngAfterViewInit() {

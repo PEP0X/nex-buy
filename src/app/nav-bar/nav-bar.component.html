@@ -123,10 +123,10 @@
           All Categories <fa-icon [icon]="down"></fa-icon>
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#">Electronics</a></li>
-          <li><a class="dropdown-item" href="#">Jewelery</a></li>
-          <li><a class="dropdown-item" href="#">Men's clothing</a></li>
-          <li><a class="dropdown-item" href="#">Women's clothing</a></li>
+          <li><a class="dropdown-item" [routerLink]="['/category', 'electronics']">Electronics</a></li>
+          <li><a class="dropdown-item" [routerLink]="['/category', 'jewelery']">Jewelery</a></li>
+          <li><a class="dropdown-item" [routerLink]="['/category', 'men\'s clothing']">Men's clothing</a></li>
+          <li><a class="dropdown-item" [routerLink]="['/category', 'women\'s clothing']">Women's clothing</a></li>
         </ul>
       </li>
       <li class="nav-item">

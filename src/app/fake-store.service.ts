@@ -129,4 +129,64 @@ export class FakeStoreService {
         console.error('Error during registration:', error);
       });
   }
+
+  // Filter products by category and price range
+  async getFilteredProducts(category?: string, minPrice?: number, maxPrice?: number) {
+    try {
+      let url = 'https://fakestoreapi.com/products';
+
+      if (category) {
+        url += `/category/${category}`;
+      }
+
+      const response = await axios.get(url);
+      let filteredProducts = response.data;
+
+      if (minPrice !== undefined || maxPrice !== undefined) {
+        filteredProducts = filteredProducts.filter((product: any) => {
+          if (minPrice !== undefined && maxPrice !== undefined) {
+            return product.price >= minPrice && product.price <= maxPrice;
+          } else if (minPrice !== undefined) {
+            return product.price >= minPrice;
+          } else if (maxPrice !== undefined) {
+            return product.price <= maxPrice;
+          }
+          return true;
+        });
+      }
+
+      console.log('Filtered products:', filteredProducts);
+      return filteredProducts;
+    } catch (error) {
+      console.error('Error fetching filtered products:', error);
+      throw error;
+    }
+  }
+
+  // Get unique sizes from all products (mock data as the API doesn't provide sizes)
+  async getAvailableSizes() {
+    // This is mock data. In a real scenario, you'd fetch this from your backend
+    return ['XS', 'S', 'M', 'L', 'XL'];
+  }
+
+  // Get unique colors from all products (mock data as the API doesn't provide colors)
+  async getAvailableColors() {
+    // This is mock data. In a real scenario, you'd fetch this from your backend
+    return ['green', 'white', 'black', 'red', 'blue'];
+  }
+
+  // Get price range (min and max prices from all products)
+  async getPriceRange() {
+    try {
+      const products = await this.getAllProducts();
+      const prices = products.map((product: any) => product.price);
+      return {
+        min: Math.min(...prices),
+        max: Math.max(...prices)
+      };
+    } catch (error) {
+      console.error('Error fetching price range:', error);
+      throw error;
+    }
+  }
 }

@@ -14,11 +14,12 @@ import { HomeComponent } from "./home/home.component";
 import { RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-
+import { HttpClientModule } from '@angular/common/http';
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    HttpClientModule,
     RouterOutlet,
     RouterModule,
     NavBarComponent,

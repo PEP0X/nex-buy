@@ -1,6 +1,9 @@
 <div class="container">
   <h1>Let's Shop Now</h1>
-  <p class="desc">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque esse minus exercitationem.</p>
+  <p class="desc">
+    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque esse minus
+    exercitationem.
+  </p>
   <div class="row">
     <!-- Filter Section -->
     <div class="col-lg-3 pb-5">
@@ -11,27 +14,48 @@
         <!-- Category Filter -->
         <div class="mb-3">
           <label for="category" class="form-label">Category</label>
-          <select id="category" class="form-select" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+          <select
+            id="category"
+            class="form-select"
+            [(ngModel)]="selectedCategory"
+            (change)="onCategoryChange()"
+          >
             <option value="">All Categories</option>
-            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+            <option *ngFor="let category of categories" [value]="category">
+              {{ category | titlecase }}
+            </option>
           </select>
         </div>
 
         <!-- Size Filter -->
         <div class="mb-3">
           <label for="size" class="form-label">Size</label>
-          <select id="size" class="form-select" [(ngModel)]="selectedSize" (change)="onSizeChange()">
+          <select
+            id="size"
+            class="form-select"
+            [(ngModel)]="selectedSize"
+            (change)="onSizeChange()"
+          >
             <option value="">All Sizes</option>
-            <option *ngFor="let size of sizes" [value]="size">{{ size }}</option>
+            <option *ngFor="let size of sizes" [value]="size">
+              {{ size }}
+            </option>
           </select>
         </div>
 
         <!-- Color Filter -->
         <div class="mb-3">
           <label for="color" class="form-label">Color</label>
-          <select id="color" class="form-select" [(ngModel)]="selectedColor" (change)="onColorChange()">
+          <select
+            id="color"
+            class="form-select"
+            [(ngModel)]="selectedColor"
+            (change)="onColorChange()"
+          >
             <option value="">All Colors</option>
-            <option *ngFor="let color of colors" [value]="color">{{ color }}</option>
+            <option *ngFor="let color of colors" [value]="color">
+              {{ color }}
+            </option>
           </select>
         </div>
 
@@ -62,9 +86,15 @@
         <div class="col-md-4 flex">
           <div class="card" [routerLink]="['/product', item.id]">
             <div class="card-img">
-              <!-- Heart as a Button -->
-              <button class="heart-icon" aria-label="Favorite" (click)="toggleFavorite($event, item.id)">
-                <fa-icon [icon]="heart" />
+              <button
+                class="heart-icon"
+                aria-label="Add to Wishlist"
+                (click)="toggleWishlist($event, item)"
+              >
+                <fa-icon
+                  [icon]="item.isInWishlist ? solidHeart : regularHeart"
+                  [ngClass]="{ 'wishlist-active': item.isInWishlist }"
+                ></fa-icon>
               </button>
               <img src="{{ item.image }}" alt="Product Image" />
             </div>
@@ -75,14 +105,19 @@
               <!-- Star Ratings as Buttons -->
               <div class="star-rating">
                 @for (filled of generateStars(item.rating.rate); track $index) {
-                  <fa-icon [icon]="star" [class.filled]="filled"></fa-icon>
+                <fa-icon [icon]="star" [class.filled]="filled"></fa-icon>
                 }
-                <span class="rating-pill" [ngClass]="getRatingClass(item.rating.rate)">
-                  {{ item.rating.rate | number:'1.1-1' }}
+                <span
+                  class="rating-pill"
+                  [ngClass]="getRatingClass(item.rating.rate)"
+                >
+                  {{ item.rating.rate | number : "1.1-1" }}
                 </span>
               </div>
               <div class="price">${{ item.price }}</div>
-              <button class="btn btn-cart" (click)="addToCart($event, item.id)">ADD TO CART</button>
+              <button class="btn btn-cart" (click)="addToCart($event, item.id)">
+                ADD TO CART
+              </button>
             </div>
           </div>
         </div>

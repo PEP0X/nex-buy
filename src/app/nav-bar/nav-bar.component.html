@@ -89,16 +89,24 @@
     </div>
 
     <div class="user_info align-items-center">
-      <div id="account" class="d-flex align-items-center">
-        <fa-icon class="user" [icon]="user"></fa-icon>
-        <p>Sign In <span>Account</span></p>
-      </div>
-      <a href="#" class="wishlist">
-        <fa-icon class="iconsize" [icon]="heart"></fa-icon>
-      </a>
-      <a href="#" class="cart">
-        <fa-icon class="iconsize" [icon]="cart"></fa-icon>
-      </a>
+      <ng-container *ngIf="!fakeStoreService.isLoggedIn(); else loggedIn">
+        <div id="account" class="d-flex align-items-center" routerLink="/login">
+          <fa-icon class="user" [icon]="user"></fa-icon>
+          <p>Sign In <span>Account</span></p>
+        </div>
+      </ng-container>
+      <ng-template #loggedIn>
+        <div id="account" class="d-flex align-items-center" (click)="logout()">
+          <fa-icon class="user" [icon]="signOut"></fa-icon>
+          <p>Sign Out</p>
+        </div>
+        <a routerLink="/wishlist" class="wishlist">
+          <fa-icon class="iconsize" [icon]="heart"></fa-icon>
+        </a>
+        <a routerLink="/cart" class="cart">
+          <fa-icon class="iconsize" [icon]="cart"></fa-icon>
+        </a>
+      </ng-template>
     </div>
   </div>
   <nav class="navbar navbar-expand navbar-light">

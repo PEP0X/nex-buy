@@ -1,0 +1,41 @@
+<div class="p-grid p-align-center vh-100">
+  <div class="p-col-12">
+    <div class="p-d-flex p-jc-center p-ai-center h-100">
+      <div class="p-fluid form-container">
+        <h2 class="text-center p-mb-4">LOGIN</h2>
+        <div class="p-d-grid p-mb-3"></div>
+        <p class="text-center desc">
+          If you have an account with us please login
+        </p>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="p-field">
+            <input id="username" type="text" formControlName="username" placeholder="Username" />
+            <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+              <small class="error-message" *ngIf="username?.errors?.['required']">Username is required.</small>
+              <small class="error-message" *ngIf="username?.errors?.['minlength']">Username must be at least 3 characters long.</small>
+            </div>
+          </div>
+          <div class="p-field">
+            <input id="password" type="password" formControlName="password" placeholder="Password" />
+            <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+              <small class="error-message" *ngIf="password?.errors?.['required']">Password is required.</small>
+              <small class="error-message" *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters long.</small>
+            </div>
+          </div>
+          <div class="p-d-grid">
+            <button
+              class="login custom-signin-btn p-button-block"
+              type="submit"
+              [disabled]="loginForm.invalid"
+            >
+              Log In
+            </button>
+          </div>
+        </form>
+        <div class="text-center p-mt-3">
+          <small>Don't have an account? <span routerLink="/signup">Sign up</span></small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

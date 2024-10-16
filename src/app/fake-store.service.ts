@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+// Add this interface definition
+
+// Update the WishlistItem interface
+interface WishlistItem {
+  productId: number;
+  addedAt: Date;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class FakeStoreService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   // Fake Store API
-
   // Get all products
   async getAllProducts() {
     return axios
@@ -104,18 +113,24 @@ export class FakeStoreService {
 
   // login
   async login(username: string, password: string) {
-    return axios
-      .post('https://fakestoreapi.com/auth/login', {
+    try {
+      const response = await axios.post('https://fakestoreapi.com/auth/login', {
         username,
         password,
-      })
-      .then((response) => {
-        console.log('Login successful:', response.data);
-        return response.data;
-      })
-      .catch((error) => {
-        console.error('Error during login:', error);
       });
+
+      if (response.status !== 200) {
+        throw new Error('Login failed');
+      }
+
+      // Store the token in localStorage
+      localStorage.setItem('authToken', response.data.token);
+
+      return response.data;
+    } catch (error) {
+      console.error('Error during login:', error);
+      throw error;
+    }
   }
   // Register
   async registerUser(user: any) {
@@ -131,7 +146,11 @@ export class FakeStoreService {
   }
 
   // Filter products by category and price range
-  async getFilteredProducts(category?: string, minPrice?: number, maxPrice?: number) {
+  async getFilteredProducts(
+    category?: string,
+    minPrice?: number,
+    maxPrice?: number
+  ) {
     try {
       let url = 'https://fakestoreapi.com/products';
 
@@ -182,11 +201,82 @@ export class FakeStoreService {
       const prices = products.map((product: any) => product.price);
       return {
         min: Math.min(...prices),
-        max: Math.max(...prices)
+        max: Math.max(...prices),
       };
     } catch (error) {
       console.error('Error fetching price range:', error);
       throw error;
     }
+  }
+
+  async addToCart(productId: number, quantity: number = 1) {
+    try {
+      // In a real application, you would send a request to your backend
+      // For now, we'll just store the item in localStorage
+      const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+      const existingItem = cartItems.find(
+        (item: any) => item.productId === productId
+      );
+
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        cartItems.push({ productId, quantity });
+      }
+
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      return { success: true, message: 'Item added to cart' };
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+      return { success: false, message: 'Failed to add item to cart' };
+    }
+  }
+
+  logout() {
+    // Remove the auth token from localStorage
+    localStorage.removeItem('authToken');
+    // Remove the isLoggedIn flag from localStorage
+    localStorage.removeItem('isLoggedIn');
+    // Clear any other user-related data from localStorage if needed
+    // For example:
+    // localStorage.removeItem('userData');
+
+    console.log('User logged out successfully');
+  }
+
+  isLoggedIn(): boolean {
+    // Check if the authToken exists in localStorage
+    const authToken = localStorage.getItem('authToken');
+    return !!authToken; // Returns true if authToken exists, false otherwise
+  }
+
+  getWishlistItems(): WishlistItem[] {
+    const wishlistItems = JSON.parse(
+      localStorage.getItem('wishlistItems') || '[]'
+    );
+    return wishlistItems;
+  }
+
+  addToWishlist(productId: number): Promise<any> {
+    const wishlistItems = this.getWishlistItems();
+    if (!wishlistItems.some((item) => item.productId === productId)) {
+      wishlistItems.push({ productId, addedAt: new Date() });
+      localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+    }
+    return Promise.resolve({ success: true });
+  }
+
+  removeFromWishlist(productId: number): Promise<any> {
+    const wishlistItems = this.getWishlistItems();
+    const updatedWishlist = wishlistItems.filter(
+      (item) => item.productId !== productId
+    );
+    localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlist));
+    return Promise.resolve({ success: true });
+  }
+
+  isInWishlist(productId: number): boolean {
+    const wishlistItems = this.getWishlistItems();
+    return wishlistItems.some((item) => item.productId === productId);
   }
 }

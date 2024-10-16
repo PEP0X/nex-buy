@@ -3,11 +3,14 @@ import { FakeStoreService } from '../fake-store.service';
 import { Product } from '../product.model';
 import { WishlistItem } from '../wishlist-item.model';
 import Swal from 'sweetalert2';
-
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-wishlist',
   templateUrl: './wishlist.component.html',
-  styleUrls: ['./wishlist.component.css']
+  styleUrls: ['./wishlist.component.css'],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
 })
 export class WishlistComponent implements OnInit {
   wishlistItems: WishlistItem[] = [];
@@ -19,17 +22,20 @@ export class WishlistComponent implements OnInit {
   }
 
   async loadWishlist(): Promise<void> {
-    const wishlistIds = this.fakeStoreService.getWishlistItems();
+    const wishlistItems = JSON.parse(localStorage.getItem('wishlistItems') || '[]');
+    console.log('Wishlist items from localStorage:', wishlistItems);
     this.wishlistItems = await Promise.all(
-      wishlistIds.map(async (item): Promise<WishlistItem> => {
+      wishlistItems.map(async (item: any): Promise<WishlistItem> => {
         const product = await this.fakeStoreService.getProductById(item.productId);
+        console.log('Fetched product:', product);
         return {
           id: item.productId,
           product: product,
-          addedAt: item.addedAt
+          addedAt: new Date(item.addedAt)
         };
       })
     );
+    console.log('Final wishlist items:', this.wishlistItems);
   }
 
   async removeFromWishlist(productId: number): Promise<void> {

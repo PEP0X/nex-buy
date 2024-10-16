@@ -279,4 +279,14 @@ export class FakeStoreService {
     const wishlistItems = this.getWishlistItems();
     return wishlistItems.some((item) => item.productId === productId);
   }
+
+  getCartItemCount(): number {
+    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    return cartItems.reduce((total: number, item: any) => total + item.quantity, 0);
+  }
+
+  getWishlistItemCount(): number {
+    const wishlistItems = JSON.parse(localStorage.getItem('wishlistItems') || '[]');
+    return wishlistItems.length;
+  }
 }

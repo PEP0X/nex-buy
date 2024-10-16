@@ -1,4 +1,4 @@
-import { Component, Renderer2, Inject } from '@angular/core';
+import { Component, Renderer2, Inject, OnInit, OnDestroy } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-regular-svg-icons';
 import { RouterModule } from '@angular/router';
@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import { Offcanvas } from 'bootstrap';  // <-- Import Bootstrap JS
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -25,7 +26,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css',
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit, OnDestroy {
   location = faLocationDot;
   user = faUser;
   heart = faHeart;
@@ -51,6 +52,9 @@ export class NavBarComponent {
   cartItemCount: number = 0;
   wishlistItemCount: number = 0;
 
+  private cartSubscription: Subscription = new Subscription();
+  private wishlistSubscription: Subscription = new Subscription();
+
   constructor(
     public fakeStoreService: FakeStoreService,
     private router: Router,
@@ -58,6 +62,25 @@ export class NavBarComponent {
     @Inject(DOCUMENT) private document: Document
   ) {
     this.updateItemCounts();
+  }
+
+  ngOnInit() {
+    this.cartSubscription = this.fakeStoreService.cartUpdated$.subscribe(() => {
+      this.updateItemCounts();
+    });
+
+    this.wishlistSubscription = this.fakeStoreService.wishlistUpdated$.subscribe(() => {
+      this.updateItemCounts();
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
+    if (this.wishlistSubscription) {
+      this.wishlistSubscription.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {
@@ -142,5 +165,9 @@ export class NavBarComponent {
   updateItemCounts() {
     this.cartItemCount = this.fakeStoreService.getCartItemCount();
     this.wishlistItemCount = this.fakeStoreService.getWishlistItemCount();
+  }
+
+  closeCategoryDropdown() {
+    this.isCategoryDropdownOpen = false;
   }
 }

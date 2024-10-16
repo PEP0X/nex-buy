@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 // Add this interface definition
 
@@ -14,6 +14,12 @@ interface WishlistItem {
   providedIn: 'root',
 })
 export class FakeStoreService {
+  private cartUpdated = new BehaviorSubject<void>(undefined);
+  private wishlistUpdated = new BehaviorSubject<void>(undefined);
+
+  cartUpdated$ = this.cartUpdated.asObservable();
+  wishlistUpdated$ = this.wishlistUpdated.asObservable();
+
   constructor(private http: HttpClient) {}
 
   // Fake Store API
@@ -225,10 +231,29 @@ export class FakeStoreService {
       }
 
       localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      this.cartUpdated.next();
       return { success: true, message: 'Item added to cart' };
     } catch (error) {
       console.error('Error adding item to cart:', error);
       return { success: false, message: 'Failed to add item to cart' };
+    }
+  }
+
+  async removeFromCart(productId: number) {
+    try {
+      // In a real application, you would send a request to your backend
+      // For now, we'll just remove the item from localStorage
+      const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+      const updatedCartItems = cartItems.filter(
+        (item: any) => item.productId !== productId
+      );
+
+      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
+      this.cartUpdated.next();
+      return { success: true, message: 'Item removed from cart' };
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+      return { success: false, message: 'Failed to remove item from cart' };
     }
   }
 
@@ -257,21 +282,23 @@ export class FakeStoreService {
     return wishlistItems;
   }
 
-  addToWishlist(productId: number): Promise<any> {
+  async addToWishlist(productId: number) {
     const wishlistItems = this.getWishlistItems();
     if (!wishlistItems.some((item) => item.productId === productId)) {
       wishlistItems.push({ productId, addedAt: new Date() });
       localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems));
+      this.wishlistUpdated.next();
     }
     return Promise.resolve({ success: true });
   }
 
-  removeFromWishlist(productId: number): Promise<any> {
+  async removeFromWishlist(productId: number) {
     const wishlistItems = this.getWishlistItems();
     const updatedWishlist = wishlistItems.filter(
       (item) => item.productId !== productId
     );
     localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlist));
+    this.wishlistUpdated.next();
     return Promise.resolve({ success: true });
   }
 

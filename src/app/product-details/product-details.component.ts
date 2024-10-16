@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FakeStoreService } from '../fake-store.service';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHeart, faShoppingCart, faStar, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-
+import { register } from 'swiper/element/bundle';
+import { TruncatePipe } from '../shared/pipes/truncate.pipe';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule, TruncatePipe, RouterModule],
   templateUrl: './product-details.component.html',
-  styleUrls: ['./product-details.component.css']
+  styleUrls: ['./product-details.component.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
+
 export class ProductDetailsComponent implements OnInit {
   productDetails: any = {};
   currentImageIndex: number = 0;
@@ -19,6 +23,7 @@ export class ProductDetailsComponent implements OnInit {
   isInWishlist: boolean = false;
   addingToCart: boolean = false;
   addedToCart: boolean = false;
+  relatedProducts: any[] = [];
 
   // FontAwesome icons
   faHeart = faHeart;
@@ -30,7 +35,9 @@ export class ProductDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private fakeStoreService: FakeStoreService
-  ) {}
+  ) {
+    register();
+  }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -45,10 +52,21 @@ export class ProductDetailsComponent implements OnInit {
       this.productDetails = await this.fakeStoreService.getProductById(id);
       // Simulate multiple images
       this.productDetails.images = [this.productDetails.image, this.productDetails.image, this.productDetails.image];
+      this.checkWishlistStatus();
+      await this.fetchRelatedProducts();
     } catch (error) {
       console.error('Error fetching product details:', error);
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  async fetchRelatedProducts() {
+    try {
+      const products = await this.fakeStoreService.getProductsByCategory(this.productDetails.category);
+      this.relatedProducts = products.filter((product: any) => product.id !== this.productDetails.id).slice(0, 10);
+    } catch (error) {
+      console.error('Error fetching related products:', error);
     }
   }
 
@@ -60,11 +78,10 @@ export class ProductDetailsComponent implements OnInit {
     this.currentImageIndex = (this.currentImageIndex - 1 + this.productDetails.images.length) % this.productDetails.images.length;
   }
 
-  async addToCart(id: number) {
+  async addToCart() {
     this.addingToCart = true;
     try {
-      // Simulate adding to cart
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await this.fakeStoreService.addToCart(this.productDetails.id);
       this.addedToCart = true;
       setTimeout(() => this.addedToCart = false, 2000);
     } catch (error) {
@@ -74,9 +91,21 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-  toggleWishlist() {
-    this.isInWishlist = !this.isInWishlist;
-    // Implement actual wishlist logic here
+  async toggleWishlist() {
+    try {
+      if (this.isInWishlist) {
+        await this.fakeStoreService.removeFromWishlist(this.productDetails.id);
+      } else {
+        await this.fakeStoreService.addToWishlist(this.productDetails.id);
+      }
+      this.isInWishlist = !this.isInWishlist;
+    } catch (error) {
+      console.error('Error toggling wishlist:', error);
+    }
+  }
+
+  checkWishlistStatus() {
+    this.isInWishlist = this.fakeStoreService.isInWishlist(this.productDetails.id);
   }
 
   generateStars(rating: number): boolean[] {

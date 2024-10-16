@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { RouterOutlet, Router, NavigationEnd} from '@angular/router';
+import { ViewportScroller } from '@angular/common';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { LandingSectionComponent } from './landing-section/landing-section.component';
 import { VideoSectionComponent } from './video-section/video-section.component';
@@ -15,6 +16,7 @@ import { RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -38,16 +40,25 @@ import { HttpClientModule } from '@angular/common/http';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'final-project';
   isStandalonePage: boolean = false;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private viewportScroller: ViewportScroller) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
       const currentRoute = this.router.routerState.snapshot.root;
       this.isStandalonePage = currentRoute.firstChild?.data['standalone'] === true;
+      this.viewportScroller.scrollToPosition([0, 0]);
+    });
+  }
+
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo(0, 0);
+      }
     });
   }
 }

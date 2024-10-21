@@ -77,7 +77,7 @@
           <div class="card-body d-flex flex-column">
             <h5 class="card-title">{{ product.title | truncate:30 }}</h5>
             <p class="card-text mt-auto">${{ product.price }}</p>
-            <a [routerLink]="['/product', product.id]" class="btn btn-outline-dark mt-2">View Details</a>
+            <button (click)="showProductDetails(product.id)" class="btn btn-outline-dark mt-2">View Details</button>
           </div>
         </div>
       </swiper-slide>

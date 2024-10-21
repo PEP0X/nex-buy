@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FakeStoreService } from '../fake-store.service';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -34,6 +34,7 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fakeStoreService: FakeStoreService
   ) {
     register();
@@ -110,5 +111,12 @@ export class ProductDetailsComponent implements OnInit {
 
   generateStars(rating: number): boolean[] {
     return Array(5).fill(false).map((_, index) => rating > index);
+  }
+
+  showProductDetails(productId: number) {
+    this.router.navigate(['/product', productId]).then(() => {
+      window.location.reload();
+      setTimeout(() => window.scrollTo(0, 0), 500);
+    });
   }
 }

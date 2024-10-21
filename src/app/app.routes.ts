@@ -22,7 +22,7 @@ export const routes: Routes = [
   { path: 'track', component: TrackComponent, canActivate: [AuthGuard] },
   { path: 'success', component: CartbodyComponent, canActivate: [AuthGuard] },
   { path: 'cancel', component: CartbodyComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginComponent, data: { standalone: true } },
+  { path: 'login', component: LoginComponent, canActivate: [AuthGuard], data: { standalone: true } },
   { path: 'signup', component: RegisterComponent, data: { standalone: true } },
   { path: '**', component: NotFoundComponent, data: { standalone: true } },
 ];
